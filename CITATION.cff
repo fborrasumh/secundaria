@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "Si usas este software, cítalo con estos metadatos."
-title: "Genia"
+title: "SecundarIA"
 type: software
 authors:
   - family-names: "Borrás Rocher"
@@ -10,6 +10,6 @@ authors:
 doi: "10.5281/zenodo.21423169"
 version: "1.0.0"
 date-released: "2026-07-18"
-url: "https://fborrasumh.github.io/genia/"
-repository-code: "https://github.com/fborrasumh/genia"
+url: "https://fborrasumh.github.io/secundaria/"
+repository-code: "https://github.com/fborrasumh/secundaria"
 license: MIT
