@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Genia — Generador de Programaciones Didácticas</title>
+<title>SecundarIA — Generador de Programaciones Didácticas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
@@ -12,7 +12,7 @@
 <script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js"></script>
 <style>
 :root {
-  --bg:#f7f8fa; --surface:#ffffff; --surface2:#f3f4f6; --border:#e5e7eb;
+  --bg:#fcfcfd; --surface:#ffffff; --surface2:#f7f8fa; --border:#e5e7eb;
   --accent:#2563eb; --accent-light:#eff6ff; --accent-dark:#1d4ed8;
   --teal:#059669; --teal-light:#ecfdf5;
   --amber:#d97706; --amber-light:#fffbeb;
@@ -269,7 +269,7 @@ h1,h2,h3,h4{font-family:'DM Serif Display',serif;font-weight:400;line-height:1.3
 <!-- SIDEBAR -->
 <nav class="sidebar">
   <div class="sidebar-logo">
-    <div class="logo-name">Genia</div>
+    <div class="logo-name">SecundarIA</div>
     <div class="logo-sub">Programaciones Didácticas · CV</div>
   </div>
   <div class="sidebar-nav">
@@ -1142,10 +1142,29 @@ let currentMode = 'quick';
 let genStartTime = null;
 
 const TOTAL_TABS = 10;
-const LS_FORM = 'genia_form_v3';
-const LS_RESULTS = 'genia_results_v3';
-const LS_APIKEY = 'genia_apikey';
-const LS_PROFILES = 'genia_profiles_v3';
+const LS_FORM = 'secundaria_form_v3';
+const LS_RESULTS = 'secundaria_results_v3';
+const LS_APIKEY = 'secundaria_apikey';
+const LS_PROFILES = 'secundaria_profiles_v3';
+
+/* Migración única desde las claves antiguas (Genia) */
+(function migrarClavesAntiguas(){
+  const mapa = [
+    ['genia_form_v3',     LS_FORM],
+    ['genia_results_v3',  LS_RESULTS],
+    ['genia_apikey',      LS_APIKEY],
+    ['genia_profiles_v3', LS_PROFILES]
+  ];
+  try{
+    mapa.forEach(([viejo, nuevo])=>{
+      const valor = localStorage.getItem(viejo);
+      if(valor !== null && localStorage.getItem(nuevo) === null){
+        localStorage.setItem(nuevo, valor);
+      }
+      if(valor !== null) localStorage.removeItem(viejo);
+    });
+  }catch(e){ /* localStorage no disponible */ }
+})();
 
 const SECTIONS = [
   {id:'introduccion',            label:'1. Introducción y Contextualización',       desc:'Justificación normativa, contextualización del centro, departamento y características del alumnado. Referencias legislativas completas.'},
@@ -2151,7 +2170,7 @@ function buildFullMarkdown() {
   const dep=formData.departamento||{}, t=formData.organizacion_temporal||{};
   let md=`# PROGRAMACIÓN DIDÁCTICA\n\n## ${m.nombre}\n### ${etapaLabelFor(m)}\n\n---\n\n**Centro:** ${c.nombre}\n**Curso:** ${t.calendario_inicio}–${t.calendario_fin}\n**Departamento:** ${dep.nombre}\n**Fecha:** ${new Date().toLocaleDateString('es-ES')}\n\n---\n\n`;
   SECTIONS.forEach(s => { if (generatedSections[s.id]) md+=`\n# ${s.label}\n\n${generatedSections[s.id]}\n\n---\n\n`; });
-  md+=`\n---\n\n*Generado con Genia — ${new Date().toLocaleString('es-ES')}*\n`;
+  md+=`\n---\n\n*Generado con SecundarIA — ${new Date().toLocaleString('es-ES')}*\n`;
   return md;
 }
 
@@ -2336,7 +2355,7 @@ async function downloadWord() {
 
     children.push(
       new Paragraph({ spacing:{before:480}, border:{ top:{ style:BorderStyle.SINGLE, size:1, color:'E5E7EB' } },
-        children:[new TextRun({ text:`Generado con Genia — ${new Date().toLocaleString('es-ES')}`, size:18, font:'Arial', color:'9CA3AF', italics:true })] })
+        children:[new TextRun({ text:`Generado con SecundarIA — ${new Date().toLocaleString('es-ES')}`, size:18, font:'Arial', color:'9CA3AF', italics:true })] })
     );
 
     const doc = new Document({
